@@ -6,16 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class UsuarioCadastro(
-    val login : String = "",
     val email : String = "",
     val senha : String = "",
     val confirmarsenha : String = "",
     val errorMessage : String = ""
 ) {
     fun validateAllFields() {
-        if (login.isBlank()){
-            throw Exception("Login é obrigatório")
-        }
         if (email.isBlank()){
             throw Exception("E-mail é obrigatório")
         }
@@ -28,7 +24,6 @@ data class UsuarioCadastro(
         else if (confirmarsenha != senha){
             throw Exception("As senhas não conferem")
         }
-
     }
 }
 
@@ -38,9 +33,6 @@ class RegisterUserViewModel : ViewModel() {
 
     fun onEmailChange(email:String){
         _uiState.value = _uiState.value.copy(email = email)
-    }
-    fun onLoginChange(login: String){
-        _uiState.value = _uiState.value.copy(login = login)
     }
     fun onSenhaChange(senha:String){
         _uiState.value = _uiState.value.copy(senha = senha)

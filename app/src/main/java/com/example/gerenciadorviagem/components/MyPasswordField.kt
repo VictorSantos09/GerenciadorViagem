@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.twotone.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -24,7 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 
 
 @Composable
@@ -55,14 +54,14 @@ fun MyPasswordField(value:String, onValueChange: (String) -> Unit, label:String,
                 unfocusedLabelColor = Color.Gray),
             label = { Text(text = label) },
             supportingText = {if (required) {if (isTouched.value && value.isBlank()){
-                Text(text = "Field $label is required")
+                Text(text = "$label é obrigatório")
             } }},
             trailingIcon = {
                 val image = if (shown.value)
-                    Icons.TwoTone.Info
-                else Icons.Outlined.Info
+                    Icons.Filled.Visibility
+                else Icons.Filled.VisibilityOff
                 IconButton (onClick = { shown.value = !shown.value }) {
-                    Icon(imageVector = image, contentDescription = if (shown.value) "Hide password" else "Show password")
+                    Icon(imageVector = image, contentDescription = if (shown.value) "Esconder senha" else "Mostrar senha")
                 }
             },
             visualTransformation = if (shown.value) VisualTransformation.None else PasswordVisualTransformation(),
@@ -106,10 +105,10 @@ fun MyPasswordField(value:String, confirmValue:String, onValueChange: (String) -
             } }},
             trailingIcon = {
                 val image = if (shown.value)
-                    Icons.TwoTone.Info
-                else Icons.Outlined.Info
+                    Icons.Filled.Visibility
+                else Icons.Filled.VisibilityOff
                 IconButton (onClick = { shown.value = !shown.value }) {
-                    Icon(imageVector = image, contentDescription = if (shown.value) "Hide password" else "Show password")
+                    Icon(imageVector = image, contentDescription = if (shown.value) "Esconder senha" else "Mostrar senha")
                 }
             },
             visualTransformation = if (shown.value) VisualTransformation.None else PasswordVisualTransformation(),

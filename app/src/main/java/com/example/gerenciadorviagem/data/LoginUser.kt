@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class LoginUser(
-    val usuario : String = "",
+    val email : String = "",
     val senha : String = "",
     val errorMessage : String = ""
 ) {
     fun validateAllFields() {
-        if (usuario.isBlank()){
-            throw Exception("Informe o nome de usuário.")
+        if (email.isBlank()){
+            throw Exception("Informe o email.")
         }
         if (senha.isBlank()){
             throw Exception("Informe a senha")
@@ -21,22 +21,14 @@ data class LoginUser(
 }
 
 class LoginrUserViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(UsuarioCadastro())
-    val uiState : StateFlow<UsuarioCadastro> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(LoginUser())
+    val uiState : StateFlow<LoginUser> = _uiState.asStateFlow()
 
     fun onEmailChange(email:String){
         _uiState.value = _uiState.value.copy(email = email)
     }
-    fun onLoginChange(login: String){
-        _uiState.value = _uiState.value.copy(login = login)
-
-    }
     fun onSenhaChange(senha:String){
         _uiState.value = _uiState.value.copy(senha = senha)
-
-    }
-    fun onConfirmarSenhaChange(senha:String){
-        _uiState.value = _uiState.value.copy(confirmarsenha = senha)
 
     }
     fun login():Boolean {
