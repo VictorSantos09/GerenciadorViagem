@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -94,7 +95,7 @@ fun RegisterUserFields(registerUserViewModel: RegisterUserViewModel, backToLogin
 
 
 
-    Button(
+    OutlinedButton(
         modifier = Modifier.padding(top = 16.dp),
         onClick = {
             registerUserViewModel.register()
@@ -103,7 +104,7 @@ fun RegisterUserFields(registerUserViewModel: RegisterUserViewModel, backToLogin
         Text(text = "Criar conta")
     }
 
-    Button(
+    OutlinedButton(
         modifier = Modifier.padding(top = 16.dp),
         onClick = backToLogin
     ) {
