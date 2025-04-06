@@ -30,6 +30,9 @@ data class UsuarioCadastro(
         return ""
     }
     fun validateAllFields() {
+        if (user.isBlank()){
+            throw Exception("Nome é obrigatório")
+        }
         if (email.isBlank()){
             throw Exception("E-mail é obrigatório")
         }
