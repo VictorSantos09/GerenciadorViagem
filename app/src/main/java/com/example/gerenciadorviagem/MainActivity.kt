@@ -37,7 +37,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.gerenciadorviagem.screens.CadastroScreen
+import com.example.gerenciadorviagem.screens.CadastroUsuarioMainScreen
 import com.example.gerenciadorviagem.screens.LoginScreen
 import com.example.gerenciadorviagem.screens.MainScreen
 import com.example.gerenciadorviagem.ui.theme.GerenciadorViagemTheme
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     
                     topBar = {
-                        if (currentBackStackEntry.value?.destination?.route != "LoginScreen" && currentBackStackEntry.value?.destination?.route != "RegisterScreen")
+                        if (currentBackStackEntry.value?.destination?.route != "LoginScreen" && currentBackStackEntry.value?.destination?.route != "CadastroScreen")
                         {
                             TopAppBar(title = { Text("Gerenciador de viagem",
                                         fontWeight = FontWeight.W900,
@@ -133,13 +133,11 @@ class MainActivity : ComponentActivity() {
                             composable(route = "LoginScreen") {
                                 LoginScreen(
                                     onLogin = { navController.navigate("MainScreen") },
-                                    onRegister = { navController.navigate("RegisterScreen") })
+                                    onRegister = { navController.navigate("CadastroScreen") })
                             }
 
-                            composable(route = "RegisterScreen") {
-                                CadastroScreen(
-                                    onRegister = { navController.navigate(it) },
-                                    backToLogin = { navController.navigateUp() })
+                            composable(route = "CadastroScreen") {
+                                CadastroUsuarioMainScreen(backToLogin = { navController.navigateUp() })
                             }
                             composable(route = "MainScreen") {
                                 MainScreen(onEditTrip = {}, onRegisterTrip = {})

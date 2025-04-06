@@ -1,36 +1,65 @@
 package com.example.gerenciadorviagem.data
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.gerenciadorviagem.dao.UserDao
+import com.example.gerenciadorviagem.entity.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 data class UsuarioCadastro(
+    val user: String = "",
     val email : String = "",
     val senha : String = "",
-    val confirmarsenha : String = "",
-    val errorMessage : String = ""
+    val confirmarSenha : String = "",
+    val errorMessage : String = "",
+    val isSaved : Boolean = false
 ) {
+    fun validatePassord(): String {
+        if (senha.isBlank()) {
+            return "Senha é obrigatório"
+        }
+        return ""
+    }
+    fun validateConfirmPassword(): String {
+        if (confirmarSenha != senha) {
+            return "As senhas não conferem"
+        }
+        return ""
+    }
     fun validateAllFields() {
         if (email.isBlank()){
             throw Exception("E-mail é obrigatório")
         }
-        if (senha.isBlank()){
-            throw Exception("Senha é obrigatório")
+        if (validatePassord().isNotBlank()) {
+            throw Exception(validatePassord())
         }
-        if (confirmarsenha.isBlank()) {
-            throw Exception("Confirme sua senha")
+        if (validateConfirmPassword().isNotBlank()) {
+            throw Exception(validateConfirmPassword())
         }
-        else if (confirmarsenha != senha){
-            throw Exception("As senhas não conferem")
         }
+    fun toUser(): User {
+        return User (
+            name = user,
+            email = email,
+            password = senha
+        )
+
     }
 }
 
-class RegisterUserViewModel : ViewModel() {
+class RegisterUserViewModel(
+    private val userDao: UserDao
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(UsuarioCadastro())
     val uiState : StateFlow<UsuarioCadastro> = _uiState.asStateFlow()
 
+    fun onUserChange(user: String) {
+        _uiState.value = _uiState.value.copy(user = user)
+    }
     fun onEmailChange(email:String){
         _uiState.value = _uiState.value.copy(email = email)
     }
@@ -38,19 +67,25 @@ class RegisterUserViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(senha = senha)
     }
     fun onConfirmarSenhaChange(senha:String){
-        _uiState.value = _uiState.value.copy(confirmarsenha = senha)
+        _uiState.value = _uiState.value.copy(confirmarSenha = senha)
     }
-    fun register():Boolean {
-        return try {
-            _uiState.value.validateAllFields()
-            true
-        } catch (e: Exception) {
-            _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "Unknown error")
-            false
 
+    fun register()  {
+        try {
+            _uiState.value.validateAllFields()
+
+            viewModelScope.launch {
+                userDao.insert(_uiState.value.toUser())
+                _uiState.value = _uiState.value.copy(isSaved = true)
+            }
+        }
+        catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(errorMessage = e.message ?: "Unknow error")
         }
     }
-    fun cleanErrorMessage() {
-        _uiState.value = _uiState.value.copy(errorMessage = "")
+    fun cleanDisplayValues() {
+        _uiState.value = _uiState.value.copy(
+            isSaved = false,
+            errorMessage = "")
     }
 }

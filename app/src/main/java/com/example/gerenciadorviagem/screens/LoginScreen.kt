@@ -41,11 +41,11 @@ fun LoginScreen(
 
         MyTextField(value = loginUser.value.email,
                     onValueChange = {loginUserViewModel.onEmailChange(it)}
-                    , "Email", true)
+                    , label = "Email")
 
         MyPasswordField(value = loginUser.value.senha,
                     onValueChange = {loginUserViewModel.onSenhaChange(it)},
-                "Senha", true)
+            label = "Senha")
 
         OutlinedButton(onClick = {
             if (loginUserViewModel.login()){
