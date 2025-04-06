@@ -22,5 +22,7 @@ interface UserDao {
     suspend fun findById (id : Int) : User?
     @Query("select * from User u order by u.name")
     suspend fun findAll():List<User>
+    @Query("select * from User u where u.email = :email and u.password = :password")
+    suspend fun findByEmailPassword(email: String, password: String): User?
 
 }

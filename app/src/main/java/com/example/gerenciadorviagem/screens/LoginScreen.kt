@@ -1,5 +1,6 @@
 package com.example.gerenciadorviagem.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,12 +16,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import com.example.gerenciadorviagem.components.ErrorDialog
 import com.example.gerenciadorviagem.components.MyPasswordField
 import com.example.gerenciadorviagem.components.MyTextField
 import com.example.gerenciadorviagem.data.LoginrUserViewModel
 import com.example.gerenciadorviagem.R
+import com.example.registeruser.database.AppDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,7 +33,10 @@ fun LoginScreen(
     onLogin:()->Unit,
     onRegister:()->Unit){
 
-    val loginUserViewModel : LoginrUserViewModel = viewModel()
+    val ctx = LocalContext.current
+    val userDao = AppDatabase.getDatabase(ctx).userDao()
+
+    val loginUserViewModel : LoginrUserViewModel = viewModel(factory = LoginUserViewModelFactory(userDao))
     var loginUser = loginUserViewModel.uiState.collectAsState()
 
     Column (verticalArrangement = Arrangement.SpaceEvenly,
@@ -48,9 +56,8 @@ fun LoginScreen(
             label = "Senha")
 
         OutlinedButton(onClick = {
-            if (loginUserViewModel.login()){
-                onLogin()
-            }
+            loginUserViewModel.login()
+            println("hit")
         },
             Modifier
                 .fillMaxWidth()
@@ -68,6 +75,16 @@ fun LoginScreen(
                 onDismissRequest = {
                     loginUserViewModel.cleanErrorMessage()
                 })
+        }
+
+        LaunchedEffect (loginUser.value.isRegistred) {
+            println("hit 1")
+            if (!loginUser.value.isRegistred) {
+                Toast.makeText(ctx, "Email ou senha inválidos",
+                    Toast.LENGTH_SHORT).show()
+            }else{
+                onLogin()
+            }
         }
     }
 }
