@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun MainScreen(
     onRegisterTrip:()->Unit,
     onEditTrip:()->Unit,){
-    Scaffold (topBar = { TopAppBar(title = { Text("Texto") },
+    Scaffold (topBar = { TopAppBar(title = { Text("Gerenciador de viagem") },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.White,titleContentColor = Color.Black)) })
     { innerPadding ->
@@ -25,6 +25,4 @@ fun MainScreen(
 
         }
     }
-
-
 }

@@ -58,19 +58,18 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         if (currentBackStackEntry.value?.destination?.route != "LoginScreen" && currentBackStackEntry.value?.destination?.route != "CadastroScreen")
                         {
-                            TopAppBar(title = { Text("Gerenciador de viagem",
+                            TopAppBar(title = { Text("Bem-vindo",
                                         fontWeight = FontWeight.W900,
                                         fontSize = 25.sp,
                                         modifier = Modifier.fillMaxWidth(),
                                         textAlign = TextAlign.Center) },
                                 
-                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.LightGray,
-                                                                    titleContentColor = Color.White))
+                        colors = TopAppBarDefaults.topAppBarColors(titleContentColor = Color.Blue, containerColor = Color.Transparent))
                         }},
                     
                     bottomBar = {
                             if (currentBackStackEntry.value?.destination?.route != "LoginScreen" && currentBackStackEntry.value?.destination?.route != "CadastroScreen") {
-                            BottomNavigation (backgroundColor = Color.LightGray) {
+                            BottomNavigation (backgroundColor = Color.Blue) {
                             val backStack = navController.currentBackStackEntryAsState()
                             val currentDestination = backStack.value?.destination
                             
