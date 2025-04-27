@@ -22,9 +22,10 @@ import androidx.compose.ui.res.painterResource
 import com.example.gerenciadorviagem.components.ErrorDialog
 import com.example.gerenciadorviagem.components.MyPasswordField
 import com.example.gerenciadorviagem.components.MyTextField
-import com.example.gerenciadorviagem.data.LoginUserViewModel
 import com.example.gerenciadorviagem.R
-import com.example.registeruser.database.AppDatabase
+import com.example.gerenciadorviagem.factory.LoginUserViewModelFactory
+import com.example.gerenciadorviagem.viewmodel.LoginUserViewModel
+import com.example.gerenciadorviagem.database.AppDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

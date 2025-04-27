@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -18,16 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gerenciadorviagem.R
 import com.example.gerenciadorviagem.components.ErrorDialog
 import com.example.gerenciadorviagem.components.MyPasswordField
 import com.example.gerenciadorviagem.components.MyTextField
-import com.example.gerenciadorviagem.data.RegisterUserViewModel
-import com.example.gerenciadorviagem.ui.theme.GerenciadorViagemTheme
-import com.example.registeruser.database.AppDatabase
+import com.example.gerenciadorviagem.factory.RegisterUserViewModelFactory
+import com.example.gerenciadorviagem.viewmodel.RegisterUserViewModel
+import com.example.gerenciadorviagem.database.AppDatabase
 
 @Composable
 fun CadastroUsuarioMainScreen(backToLogin:() -> Unit) {

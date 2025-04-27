@@ -1,8 +1,8 @@
-package com.example.gerenciadorviagem.screens
+package com.example.gerenciadorviagem.factory
 
 import androidx.lifecycle.ViewModel
 import com.example.gerenciadorviagem.dao.UserDao
-import com.example.gerenciadorviagem.data.RegisterUserViewModel
+import com.example.gerenciadorviagem.viewmodel.RegisterUserViewModel
 
 class RegisterUserViewModelFactory (
     private val userDao : UserDao
