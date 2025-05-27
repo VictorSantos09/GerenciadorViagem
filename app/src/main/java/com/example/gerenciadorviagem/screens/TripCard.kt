@@ -1,5 +1,7 @@
 package com.example.gerenciadorviagem.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.gerenciadorviagem.entity.Trip
+import com.example.gerenciadorviagem.shared.utils.DateUtils
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TripCard(trip: Trip, onClick: () -> Unit = {}) {
     Card(
@@ -80,7 +84,7 @@ fun TripCard(trip: Trip, onClick: () -> Unit = {}) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "${trip.startDate} até ${trip.endDate}",
+                    text = "${DateUtils.formatDate(trip.startDate)} até ${DateUtils.formatDate(trip.endDate)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

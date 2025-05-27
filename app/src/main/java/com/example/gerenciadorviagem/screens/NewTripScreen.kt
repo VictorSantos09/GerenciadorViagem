@@ -1,7 +1,9 @@
 package com.example.gerenciadorviagem.screens
 
 import RequiredTextField
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,10 +30,12 @@ import com.example.gerenciadorviagem.viewmodel.NewTripViewModel
 import com.example.gerenciadorviagem.factory.NewTripViewModelFactory
 import com.example.gerenciadorviagem.components.MyDatePickerField
 import com.example.gerenciadorviagem.components.RequiredNumberField
+import com.example.gerenciadorviagem.entity.TripType
 import com.example.gerenciadorviagem.shared.Routes
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewTripScreen(onNavigateTo: (String) -> Unit, id: Int?) {
@@ -101,8 +105,11 @@ fun NewTripScreen(onNavigateTo: (String) -> Unit, id: Int?) {
 
             RequiredNumberField(
                 label = "Orçamento (R$)",
-                value = uiState.value.budget,
-                onValueChange = newTripViewModel::onBudgetChange
+                value = uiState.value.budget.toString(),
+                onValueChange = { input ->
+                    val budget = input.toDoubleOrNull() ?: 0.0
+                    newTripViewModel.onBudgetChange(budget)
+                }
             )
 
             Button(
@@ -129,23 +136,19 @@ fun NewTripScreen(onNavigateTo: (String) -> Unit, id: Int?) {
 }
 
 @Composable
-fun TripTypeSelector(selectedType: String, onTypeChange: (String) -> Unit) {
-    Column(
-        modifier = Modifier.padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = "Tipo de viagem",
-            modifier = Modifier.padding(bottom = 8.dp),
+fun TripTypeSelector(selectedType: TripType, onTypeChange: (TripType) -> Unit) {
+    Row {
+        RadioButton(
+            selected = selectedType == TripType.LAZER,
+            onClick = { onTypeChange(TripType.LAZER) }
         )
+        Text("Leisure")
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            RadioButtonWithLabel("Trabalho", selectedType, onTypeChange)
-            RadioButtonWithLabel("Lazer", selectedType, onTypeChange)
-        }
+        RadioButton(
+            selected = selectedType == TripType.TRABALHO,
+            onClick = { onTypeChange(TripType.TRABALHO) }
+        )
+        Text("Work")
     }
 }
 
