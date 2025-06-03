@@ -31,64 +31,35 @@ import com.example.gerenciadorviagem.shared.utils.DateUtils
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TripCard(trip: Trip, onClick: () -> Unit = {}) {
+fun TripCard(
+    trip: Trip,
+    onClick: () -> Unit,
+    onItineraryClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
+            .padding(vertical = 8.dp)
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(24.dp)
-        ) {
-            Text(
-                text = trip.destination,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary
-            )
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Destination: ${trip.destination}")
+            Text(text = "Trip Type: ${trip.tripType}")
+            Text(text = "Start Date: ${DateUtils.formatDate(trip.startDate)}")
+            Text(text = "End Date: ${DateUtils.formatDate(trip.endDate)}")
+            Text(text = "Budget: R$ ${"%.2f".format(trip.budget)}")
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            androidx.compose.material3.Button(
+                onClick = { onItineraryClick() },
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
             ) {
-                Text(
-                    text = "Tipo: ${trip.tripType}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Orçamento: R$ ${trip.budget}",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                    color = Color(0xFF2E7D32) // verde para orçamento
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = "Data",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "${DateUtils.formatDate(trip.startDate)} até ${DateUtils.formatDate(trip.endDate)}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text(text = "Itinerary")
             }
         }
     }
-}
+    }
+

@@ -11,5 +11,7 @@ data class Trip(
     val tripType: TripType,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val budget: Double
+    val budget: Double,
+    val itinerary: String? = null,
+    val notes: String? = null
 )

@@ -45,6 +45,7 @@ import com.example.gerenciadorviagem.screens.MainScreen
 import com.example.gerenciadorviagem.screens.NewTripScreen
 import com.example.gerenciadorviagem.shared.Routes
 import com.example.gerenciadorviagem.ui.theme.GerenciadorViagemTheme
+import com.example.gerenciadorviagem.features.itnerary.ItinerarySuggestionScreen
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -73,6 +74,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ConfigurarMenus(navController: NavHostController){
     NavHost(
@@ -103,6 +105,16 @@ fun ConfigurarMenus(navController: NavHostController){
             arguments = listOf(navArgument("id") { type = NavType.IntType})) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
             NewTripScreen(onNavigateTo = { navController.navigate(it) }, id = id)
+        }
+
+        composable("itinerary/{tripId}") { backStackEntry ->
+            val tripId = backStackEntry.arguments?.getString("tripId")?.toIntOrNull()
+            if (tripId != null) {
+                ItinerarySuggestionScreen(
+                    tripId = tripId,
+                    onNavigateTo = { navController.navigate(it) }
+                )
+            }
         }
     }
 }

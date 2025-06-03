@@ -1,5 +1,7 @@
 package com.example.gerenciadorviagem.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +24,7 @@ import com.example.gerenciadorviagem.viewmodel.NewTripViewModel
 import com.example.gerenciadorviagem.entity.Trip
 import com.example.gerenciadorviagem.shared.Routes
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
@@ -35,6 +38,7 @@ fun MainScreen(navController: NavHostController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DisplayTrips(tripList: List<Trip>, navController: NavHostController, it: PaddingValues) {
     LazyColumn(
@@ -46,9 +50,15 @@ fun DisplayTrips(tripList: List<Trip>, navController: NavHostController, it: Pad
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(tripList) { trip ->
-            TripCard(trip = trip) {
-                navController.navigate("${Routes.VIAGEM}/${trip.id}")
-            }
+            TripCard(
+                trip = trip,
+                onClick = {
+                    navController.navigate("${Routes.VIAGEM}/${trip.id}")
+                },
+                onItineraryClick = {
+                    navController.navigate("itinerary/${trip.id}")
+                }
+            )
         }
     }
 }

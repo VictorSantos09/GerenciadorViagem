@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
 }
 
+
 android {
     namespace = "com.example.gerenciadorviagem"
     compileSdk = 35
@@ -17,9 +18,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+
+        val geminiApiKey = rootProject.file("local.properties")
+            .readLines()
+            .find { it.startsWith("GEMINI_API_KEY=") }
+            ?.substringAfter("=")
+            ?: ""
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     buildTypes {
@@ -40,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+	buildConfig = true
     }
 //    composeOptions {
 //        kotlinCompilerExtensionVersion = "1.5.1"
@@ -57,6 +64,9 @@ dependencies {
     //android room
     val room_version = "2.6.1"
     val ComposeMaterial = "1.7.8"
+
+    // Gemini
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.1")
 
     implementation ("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.compose.material:material:1.7.8")

@@ -81,7 +81,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun getDatabase(context: Context): AppDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                context.deleteDatabase("user_database")
+                //context.deleteDatabase("user_database")
                 Room.databaseBuilder(context, AppDatabase::class.java,
                     "user_database")
                     .addMigrations(
