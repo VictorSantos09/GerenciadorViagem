@@ -106,7 +106,7 @@ fun RegisterUserFields(registerUserViewModel: RegisterUserViewModel, backToLogin
         modifier = Modifier.padding(top = 16.dp),
         onClick = backToLogin
     ) {
-        Text(text = "Já tenho conta")
+        Text(text = "Entrar")
     }
 
     if (registerUser.value.errorMessage.isNotBlank()) {

@@ -4,39 +4,26 @@ import RequiredTextField
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults.elevatedButtonColors
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.restaurant.travel_counselor.services.ai.GeminiTripSuggestionService
 import com.restaurant.travel_counselor.services.ai.dto.TripSuggestionRequest
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
-import androidx.compose.runtime.LaunchedEffect
 import com.example.gerenciadorviagem.database.AppDatabase
 import com.example.gerenciadorviagem.shared.Routes
 
@@ -67,27 +54,50 @@ fun ItinerarySuggestionScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Itinerary Suggestion") })
-        }
-    ) { padding ->
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Sugestão de Roteiro",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
-                .padding(padding)
-                .padding(16.dp)
+                .padding(paddingValues)
+                .padding(horizontal = 20.dp, vertical = 24.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Text("Write any relevant notes or preferences:")
-
-            RequiredTextField(
-                label = "Observations",
-                value = observations,
-                onValueChange = { observations = it }
+            Text(
+                "Escreva quaisquer observações ou preferências relevantes:",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
-            Button(
+            Card(
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                RequiredTextField(
+                    label = "Observações",
+                    value = observations,
+                    onValueChange = { observations = it },
+                )
+            }
+
+            ElevatedButton(
                 onClick = {
                     isLoading = true
                     coroutineScope.launch {
@@ -106,54 +116,88 @@ fun ItinerarySuggestionScreen(
                                 itinerary = result.itinerary
                                 isGenerated = true
                             } else {
-                                Toast.makeText(context, "Trip Not Found", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Viagem não encontrada", Toast.LENGTH_LONG).show()
                             }
                         } catch (e: Exception) {
-                            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Erro: ${e.message}", Toast.LENGTH_LONG).show()
                         } finally {
                             isLoading = false
                         }
                     }
                 },
-                enabled = !isLoading
+                enabled = !isLoading,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = elevatedButtonColors()
             ) {
-                Text(if (isLoading) "Generating..." else "Generate Itinerary")
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(end = 8.dp),
+                        strokeWidth = 2.dp
+                    )
+                }
+                Text(text = if (isLoading) "Gerando..." else "Gerar Roteiro")
             }
 
             if (isGenerated) {
-                Text(itinerary)
+                Card(
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                ) {
+                    Text(
+                        text = itinerary,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .padding(16.dp),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Start
+                    )
+                }
             }
 
-            Row {
-                Button(
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                OutlinedButton(
                     onClick = { onNavigateTo(Routes.TELA_PRINCIPAL) },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.LightGray,
-                        contentColor = Color.DarkGray
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
-                    Text("Cancel")
+                    Text("Cancelar")
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
-
                 Button(
-                    enabled = isGenerated,
+                    enabled = isGenerated && !isLoading,
                     onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
+                        coroutineScope.launch(Dispatchers.IO) {
                             val trip = tripDao.findById(tripId)
                             if (trip != null) {
                                 val updatedTrip = trip.copy(itinerary = itinerary, notes = observations)
                                 tripDao.updateTrip(updatedTrip)
                                 withContext(Dispatchers.Main) {
-                                    Toast.makeText(context, "Itinerary saved!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Roteiro salvo!", Toast.LENGTH_SHORT).show()
                                     onNavigateTo(Routes.TELA_PRINCIPAL)
                                 }
                             }
                         }
-                    }
+                    },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Save")
+                    Text("Salvar")
                 }
             }
         }

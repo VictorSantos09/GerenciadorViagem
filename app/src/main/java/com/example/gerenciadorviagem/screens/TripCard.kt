@@ -57,7 +57,7 @@ fun TripCard(
                     .padding(top = 8.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Itinerary")
+                Text(text = "Roteiro")
             }
         }
     }

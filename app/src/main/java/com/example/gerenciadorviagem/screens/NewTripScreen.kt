@@ -142,13 +142,13 @@ fun TripTypeSelector(selectedType: TripType, onTypeChange: (TripType) -> Unit) {
             selected = selectedType == TripType.LAZER,
             onClick = { onTypeChange(TripType.LAZER) }
         )
-        Text("Leisure")
+        Text("Lazer")
 
         RadioButton(
             selected = selectedType == TripType.TRABALHO,
             onClick = { onTypeChange(TripType.TRABALHO) }
         )
-        Text("Work")
+        Text("Trabalho")
     }
 }
 

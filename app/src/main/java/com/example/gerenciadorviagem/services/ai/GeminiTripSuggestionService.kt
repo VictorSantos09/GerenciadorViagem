@@ -25,16 +25,25 @@ class GeminiTripSuggestionService(context: Context) : TripSuggestionService {
 
     private fun buildPrompt(request: TripSuggestionRequest): String {
         return """
-        Você é um assistente de viagens. Crie um roteiro diário e conciso para a viagem ao destino "${request.destination}".
-        A viagem ocorre de ${request.startDate} a ${request.endDate}, sendo uma viagem do tipo "${request.type}".
-        O orçamento total disponível é de R$${"%.2f".format(request.budget)}.
+        Você é um especialista em planejamento de viagens. Crie um roteiro diário, objetivo e realista para uma viagem ao destino "${request.destination}", que ocorrerá entre os dias ${request.startDate} e ${request.endDate}. O tipo da viagem é: "${request.type}".
 
-        Considere as seguintes observações e preferências do viajante: ${request.notes}.
+        O orçamento total disponível é de R$${"%.2f".format(request.budget)}. 
 
-        O roteiro deve ser prático e direto, com atividades plausíveis para os dias de viagem.
+        Leve em conta as seguintes observações e preferências do viajante: ${request.notes}.
 
-        **Importante:** A resposta deve estar completamente em **português** e **não deve conter nenhuma formatação Markdown** (ex: asteriscos, hashtags, listas com traços ou números, ou quebras desnecessárias). 
-        Utilize apenas **texto simples (plain text)**. Evite símbolos de marcação ou qualquer estilização. Responda apenas com o roteiro, sem introdução ou encerramento.
+        Para cada dia da viagem, descreva de forma clara as atividades recomendadas, respeitando o orçamento, o tipo de viagem e as preferências indicadas.
+
+        **Instruções importantes**:
+        - A resposta deve estar inteiramente em **português**.
+        - Responda apenas com o roteiro. **Não inclua introdução, explicações ou encerramento**.
+        - Use **texto simples (plain text)**. **Não utilize formatação Markdown** como listas numeradas, asteriscos, traços, emojis ou qualquer simbolismo visual.
+        - Organize o roteiro com separação por dia de forma clara, utilizando apenas texto.
+
+        Exemplo de formatação esperada:
+        Dia 1: Visita ao centro histórico, almoço em restaurante local, passeio no parque à tarde.
+
+        Dia 2: Café da manhã em padaria típica, trilha leve na região, descanso à noite.
     """.trimIndent()
     }
+
 }
